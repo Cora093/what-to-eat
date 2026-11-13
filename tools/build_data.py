@@ -34,6 +34,7 @@ def plain(s):
     s = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", s)
     s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
     s = s.replace("**", "").replace("`", "")
+    s = re.sub(r"\s*\*\s*份数", "", s)  # 原文的份数公式,如 "1g * 份数"
     return re.sub(r"[ \t]+", " ", s).strip()
 
 
