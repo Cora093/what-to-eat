@@ -1,6 +1,6 @@
 // 离线缓存:安装时把应用文件、菜谱数据和内置封面全部缓存,之后优先读缓存。
 // 改了任何应用文件后,必须把 VERSION 加一,旧缓存才会被清掉、新文件才会生效。
-const VERSION = 1;
+const VERSION = 2;
 const CACHE = `what-to-eat-v${VERSION}`;
 
 const SHELL = [

@@ -25,14 +25,24 @@ function paint() {
   root.querySelectorAll('[data-k]').forEach((e) => { scrollMem[e.dataset.k] = e.scrollTop; });
   root.innerHTML = render(S);
   root.querySelectorAll('[data-k]').forEach((e) => { e.scrollTop = scrollMem[e.dataset.k] || 0; });
+  if (toastMsg) showToast();
 }
 
-function toast(msg) {
+// 提示消息:重绘会清空页面,所以消息单独记着,每次重绘后补上。
+let toastMsg = '';
+let toastTimer;
+function showToast() {
   const el = document.createElement('div');
   el.className = 'toast';
-  el.textContent = msg;
+  el.textContent = toastMsg;
   root.appendChild(el);
-  setTimeout(() => el.remove(), 1600);
+}
+function toast(msg) {
+  toastMsg = msg;
+  root.querySelector('.toast')?.remove();
+  showToast();
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toastMsg = ''; root.querySelector('.toast')?.remove(); }, 1600);
 }
 
 // ---------- 数据 ----------
@@ -198,7 +208,10 @@ const actions = {
     S.cart[d.id] = (S.cart[d.id] || 0) + 1; saveCart();
     toast('随机选中:' + d.name);
   },
+  // "已选 N 道"和"下单"都打开已选菜品列表:在里面可以加减、清空,再确认下单。
   order: () => { if (!cartCount(S)) return toast('还没选菜'); S.sheet = 'order'; },
+  cart: () => actions.order(),
+  'clear-cart': () => { S.cart = {}; saveCart(); S.sheet = null; },
   meal: (v) => { S.meal = MEALS.includes(v) ? v : S.meal; },
   mask: () => { S.sheet = null; },
   confirm: () => confirmOrder().then(() => 'skip'),

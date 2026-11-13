@@ -48,7 +48,7 @@ function home(S) {
       <div class="manage" data-a="cats">⚙ 类别管理</div></div>
       <div class="list" data-k="list:${esc(S.cat)}">${listHtml(S)}</div></div>
     <div class="float"><div class="dice" data-a="rand"><i>🎲</i>随机选菜</div>
-      <div class="cnt">已选 ${cartCount(S)} 道</div><button class="btn dark" data-a="order">下单</button></div>`;
+      <div class="cnt" data-a="cart">已选 ${cartCount(S)} 道 <span class="up">▴</span></div><button class="btn dark" data-a="order">下单</button></div>`;
 }
 
 function ordersList(S) {
@@ -115,7 +115,8 @@ export function sheetHtml(S) {
     const d = S.dishes.find((x) => x.id === id);
     return d ? `<div class="row"><span>${esc(d.name)}</span>${stepper(S, id)}</div>` : '';
   }).join('');
-  return `<div class="mask" data-a="mask"><div class="sheet" data-stop><h3>确认下单</h3>${rows}
+  return `<div class="mask" data-a="mask"><div class="sheet" data-stop>
+    <div class="shead"><h3>已选菜品</h3><span class="clear" data-a="clear-cart">清空</span></div>${rows}
     <div class="chips">${MEALS.map((m) => `<div class="chip ${m === S.meal ? 'on' : ''}" data-a="meal" data-v="${m}">${m}</div>`).join('')}</div>
     <input class="note" id="note" placeholder="备注(可不填)" value="${esc(S.note)}">
     <button class="btn block" data-a="confirm">确认下单(${cartCount(S)} 道)</button></div></div>`;
